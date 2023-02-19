@@ -25,14 +25,17 @@
 		}																\
 		else															\
 		{																\
-#ifndef VALVE_PURE														\
+/* note(replaycoding):
+ * this ifndef is invalid syntax, according to
+ * https://stackoverflow.com/questions/10074520/why-compiler-complain-about-this-macro-declaration */ \
+/* #ifndef VALVE_PURE														*/ \
 			DevWarning( "%s\n", msg.String() );							\
 			/*
 				todo(maximsmol):
 				we do not support upstream item schema
 			*/															\
 			return false;												\
-#endif																	\
+/* #endif																	*/ \
 			pVecErrors->AddToTail( msg );								\
 		}																\
 		return false;													\
