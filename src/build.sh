@@ -15,6 +15,7 @@ MAKE_SRT_FLAGS="NO_CHROOT=1 STEAM_RUNTIME_PATH="
 MAKE_CFG="CFG=release"
 MAKE_VERBOSE=""
 VPC_FLAGS="/define:LTCG /define:CERT"
+VPC_GROUP="game"
 CORES=$(nproc)
 # shellcheck disable=SC2155
 export CC="$(pwd)/devtools/bin/linux/ccache gcc"
@@ -62,6 +63,10 @@ while [[ ${1:0:1} == '-' ]]; do
 			# shellcheck disable=SC2155
 			export CXX="$(pwd)/devtools/bin/linux/ccache clang++"
 			VPC_FLAGS+=" /define:CLANG"
+		;;
+		"-s")
+			VPC_GROUP="dedicated"
+			VPC_FLAGS+=" /define:DEDICATED"
 		;;
 		*)
 			echo "Unknown flag ${1}"
@@ -113,8 +118,12 @@ EOF
 }
 
 build_thirdparty "protobuf-2.6.1" "src/.libs/libprotobuf.a"
-build_thirdparty "libedit-3.1" "src/.libs/libedit.a" "-std=c99"
-build_thirdparty "gperftools-2.0" ".libs/libtcmalloc_minimal.so" "-fpermissive"
+if [[ $VPC_GROUP == "dedicated" ]]; then
+	build_thirdparty "libedit-3.1" "src/.libs/libedit.a" "-std=c99"
+else
+	# dedicated doesn't use tcmalloc
+	build_thirdparty "gperftools-2.0" ".libs/libtcmalloc_minimal.so" "-fpermissive"
+fi
 
 if [[ ! -f "./devtools/bin/vpc_linux" ]]; then
 	pushd .
@@ -135,7 +144,7 @@ fi
 
 # shellcheck disable=SC2086   # we want arguments to be split
 devtools/bin/vpc_linux /define:WORKSHOP_IMPORT_DISABLE /define:SIXENSE_DISABLE /define:NO_X360_XDK \
-				/define:RAD_TELEMETRY_DISABLED /define:DISABLE_ETW /retail /tf ${VPC_FLAGS} +game /mksln games
+				/define:RAD_TELEMETRY_DISABLED /define:DISABLE_ETW /retail /tf ${VPC_FLAGS} "+${VPC_GROUP}" /mksln games
 
 mkdir -p "../game"
 time CFLAGS="${CF_SUPPRESSION}" CXXFLAGS="${CF_SUPPRESSION}" make "${MAKE_SRT_FLAGS}" MAKE_VERBOSE="${MAKE_VERBOSE}" ${MAKE_CFG} \
