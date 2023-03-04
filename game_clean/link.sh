@@ -16,26 +16,26 @@ if [[ ! -d "$ORIGINAL_INSTALL_DIR" ]]; then
     exit 1
 fi
 
+OUTPUT_DIR="../game" 
+
 link_dir() {
-	ln -sn "${ORIGINAL_INSTALL_DIR}/$1" "../game/$1"
+	ln -sn "${ORIGINAL_INSTALL_DIR}/$1" "$OUTPUT_DIR/$1"
 }
 
 link_glob() {
-	ln -sn "${ORIGINAL_INSTALL_DIR}/$1/"*"$2" "../game/$1/"
+	ln -sn "${ORIGINAL_INSTALL_DIR}/$1/"*"$2" "$OUTPUT_DIR/$1/"
 }
 
 copy () {
-	cp -rfT --remove-destination "${ORIGINAL_INSTALL_DIR}/$1" "../game/$1"
+	cp -rfT --remove-destination "${ORIGINAL_INSTALL_DIR}/$1" "$OUTPUT_DIR/$1"
 }
 
-git submodule update --init
-
-cp -rfT ../game_clean/copy/ ../game/
+cp -rfT copy/ $OUTPUT_DIR
 
 link_dir hl2
 link_dir platform
 link_dir tf/maps
-mkdir ../game/tf/materials
+mkdir $OUTPUT_DIR/tf/materials
 link_dir tf/materials/models
 link_dir tf/materials/vgui
 link_dir tf/media
