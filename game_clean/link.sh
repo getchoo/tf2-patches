@@ -46,8 +46,4 @@ link_glob bin '' 2> >(grep -v "File exists")
 link_glob tf '.vpk'
 link_glob tf '.cache'
 
-copy tf/cfg
-copy tf/gamestate.txt
-copy tf/glshaders.cfg
-copy tf/videoconfig_linux.cfg
 copy hl2.sh
