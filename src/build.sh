@@ -91,7 +91,7 @@ popd
 
 # shellcheck disable=SC2086   # we want arguments to be split
 devtools/bin/vpc_linux /define:WORKSHOP_IMPORT_DISABLE /define:SIXENSE_DISABLE /define:NO_X360_XDK \
-				/define:RAD_TELEMETRY_DISABLED /define:DISABLE_ETW /retail /tf ${VPC_FLAGS} "+${VPC_GROUP}" /mksln games
+				/define:RAD_TELEMETRY_DISABLED /nofpo /tf ${VPC_FLAGS} "+${VPC_GROUP}" /mksln games
 
 mkdir -p "../game"
 time make "${MAKE_SRT_FLAGS}" MAKE_VERBOSE="${MAKE_VERBOSE}" ${MAKE_CFG} \
