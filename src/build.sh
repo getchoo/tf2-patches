@@ -81,22 +81,13 @@ else
 	build_thirdparty "gperftools-2.0" ".libs/libtcmalloc_minimal.so" "-fpermissive -w"
 fi
 
-if [[ ! -f "./devtools/bin/vpc_linux" ]]; then
-	pushd .
-	cd "./external/vpc/utils/vpc"
-	if [[ -n ${CHROOT_NAME} ]]; then
-		schroot --chroot "${CHROOT_NAME}" -- /bin/bash << EOF
-			export PATH=/bin:/usr/bin
-			export CC="$CC"
-			export CXX="$CXX"
-			make "-j$CORES" CC="$CC" CXX="$CXX"
-EOF
-	else
-		# shellcheck disable=SC2086
-		make "-j$CORES" CC="$CC" CXX="$CXX"
-	fi
-	popd
-fi
+pushd .
+
+cd "./external/vpc/utils/vpc"
+# shellcheck disable=SC2086
+make "-j$CORES" CC="$CC" CXX="$CXX"
+
+popd
 
 # shellcheck disable=SC2086   # we want arguments to be split
 devtools/bin/vpc_linux /define:WORKSHOP_IMPORT_DISABLE /define:SIXENSE_DISABLE /define:NO_X360_XDK \
