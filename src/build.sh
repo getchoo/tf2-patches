@@ -19,7 +19,6 @@ CORES=$(nproc)
 export CC="$(pwd)/devtools/bin/linux/ccache gcc"
 # shellcheck disable=SC2155
 export CXX="$(pwd)/devtools/bin/linux/ccache g++"
-export AR="ar"
 export VALVE_NO_AUTO_P4=1
 
 while [[ ${1:0:1} == '-' ]]; do
