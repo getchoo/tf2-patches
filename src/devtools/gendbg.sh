@@ -36,9 +36,9 @@ if [ "$OUTFILEDIR" != "$INFILEDIR" ]; then
 	OUTFILE=${OUTFILEDIR}/${OUTFILE}
 fi
 
-pushd "$INFILEDIR" > /dev/null
+pushd "$INFILEDIR"
 $OBJCOPY "$INFILE" "$OUTFILE"
 $OBJCOPY --add-gnu-debuglink="$OUTFILE" "$INFILE"
-popd > /dev/null
+popd
 
 
