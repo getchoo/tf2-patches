@@ -3113,21 +3113,23 @@ void CTFWeaponBase::PostDataUpdate( DataUpdateType_t updateType )
 	// clientside animation sequences on this model, which will be using bad sequences for the world model.
 	int iDesiredModelIndex = 0;
 	C_BasePlayer *pOwner = ToBasePlayer(GetOwner());
-	if ( !pOwner->ShouldDrawThisPlayer() )
-	{
-		iDesiredModelIndex = m_iViewModelIndex;
-	}
-	else
-	{
-		iDesiredModelIndex = GetWorldModelIndex();
+	if ( pOwner ) {
+		if ( !pOwner->ShouldDrawThisPlayer() )
+		{
+			iDesiredModelIndex = m_iViewModelIndex;
+		}
+		else
+		{
+			iDesiredModelIndex = GetWorldModelIndex();
 
-		// Our world models never animate
-		SetSequence( 0 );
-	}
+			// Our world models never animate
+			SetSequence( 0 );
+		}
 
-	if ( GetModelIndex() != iDesiredModelIndex )
-	{
-		SetModelIndex( iDesiredModelIndex );
+		if ( GetModelIndex() != iDesiredModelIndex )
+		{
+			SetModelIndex( iDesiredModelIndex );
+		}
 	}
 
 	BaseClass::PostDataUpdate( updateType );
