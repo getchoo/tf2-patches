@@ -1,0 +1,31 @@
+From 22bfcaf9f546fdcf44b8f92830ea071b5d3cbcfc Mon Sep 17 00:00:00 2001
+From: melvyn2 <melvyn2@brcok.tk>
+Date: Fri, 6 Aug 2021 22:13:15 -0700
+Subject: [PATCH] Fix wayland
+
+---
+ src/engine/sys_mainwind.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/engine/sys_mainwind.cpp b/src/engine/sys_mainwind.cpp
+index 535f5ad96..3ae4ad508 100644
+--- a/src/engine/sys_mainwind.cpp
++++ b/src/engine/sys_mainwind.cpp
+@@ -1550,6 +1550,8 @@ void *CGame::GetMainWindowPlatformSpecificHandle( void )
+ #ifdef WIN32
+ 	return (void*)m_hWindow;
+ #else
++
++#ifdef OSX
+ 	SDL_SysWMinfo pInfo;
+ 	SDL_VERSION( &pInfo.version );
+ 	if ( !SDL_GetWindowWMInfo( (SDL_Window*)m_pSDLWindow, &pInfo ) )
+@@ -1557,8 +1559,6 @@ void *CGame::GetMainWindowPlatformSpecificHandle( void )
+ 		Error( "Fatal Error: Unable to get window info from SDL." );
+ 		return NULL;
+ 	}
+-
+-#ifdef OSX
+ 	id nsWindow = (id)pInfo.info.cocoa.window;
+ 	SEL selector = sel_registerName("windowRef");
+ 	id windowRef = objc_msgSend( nsWindow, selector );

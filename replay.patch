@@ -1,0 +1,47 @@
+commit d9f581538f6281ba26fb6f5211ef462370266e28
+Author: ReplayCoding <replaycoding@gmail.com>
+Date:   Wed Mar 8 18:22:33 2023 -0800
+
+    Fix nullptr deref in CTFWeaponBase::PostDataUpdate
+
+diff --git a/src/game/shared/tf/tf_weaponbase.cpp b/src/game/shared/tf/tf_weaponbase.cpp
+index 93f97622..0135d7d7 100644
+--- a/src/game/shared/tf/tf_weaponbase.cpp
++++ b/src/game/shared/tf/tf_weaponbase.cpp
+@@ -3113,21 +3113,23 @@ void CTFWeaponBase::PostDataUpdate( DataUpdateType_t updateType )
+ 	// clientside animation sequences on this model, which will be using bad sequences for the world model.
+ 	int iDesiredModelIndex = 0;
+ 	C_BasePlayer *pOwner = ToBasePlayer(GetOwner());
+-	if ( !pOwner->ShouldDrawThisPlayer() )
+-	{
+-		iDesiredModelIndex = m_iViewModelIndex;
+-	}
+-	else
+-	{
+-		iDesiredModelIndex = GetWorldModelIndex();
++	if ( pOwner ) {
++		if ( !pOwner->ShouldDrawThisPlayer() )
++		{
++			iDesiredModelIndex = m_iViewModelIndex;
++		}
++		else
++		{
++			iDesiredModelIndex = GetWorldModelIndex();
+ 
+-		// Our world models never animate
+-		SetSequence( 0 );
+-	}
++			// Our world models never animate
++			SetSequence( 0 );
++		}
+ 
+-	if ( GetModelIndex() != iDesiredModelIndex )
+-	{
+-		SetModelIndex( iDesiredModelIndex );
++		if ( GetModelIndex() != iDesiredModelIndex )
++		{
++			SetModelIndex( iDesiredModelIndex );
++		}
+ 	}
+ 
+ 	BaseClass::PostDataUpdate( updateType );
